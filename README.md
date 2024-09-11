@@ -2,6 +2,10 @@
 # YAU [Documentation is WIP]
 YimAutoUpdater aka YAU is a simple application to update [YimMenu](https://github.com/YimMenu/YimMenu), Lua scripts and inject YimMenu with customizable options
 
+YAU is based on [Yim-AutoUpdater](https://github.com/Harmless05/Yim-AutoUpdater), a PowerShell script with all the same great features, but in a console window. 
+
+I made YAU because I felt the UI in Yim-AutoUpdater was a little complicated, and this new version as an .exe file is much simpler and faster to use.
+
 ## How to use it
 
 Download the application from [Releases](https://github.com/Harmless05/YAU/releases/latest) or [Download the repo](https://github.com/Harmless05/YAU/archive/refs/heads/main.zip).
