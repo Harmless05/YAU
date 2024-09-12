@@ -7,7 +7,10 @@ param (
 Start-Sleep -Seconds 5
 
 # Replace the old version with the new version
-Copy-Item -Path $tempFilePath -Destination $currentFilePath -Force
+Remove-Item -Path $currentFilePath
+# Sleep
+Start-Sleep -Seconds 5
+Move-Item -Path $tempFilePath -Destination $currentFilePath
 
 # Start the new version
 Start-Process -FilePath $currentFilePath
