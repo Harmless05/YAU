@@ -1,0 +1,103 @@
+﻿<Window x:Name="YAU" x:Class="YAU.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:YAU.Config"
+        mc:Ignorable="d"
+        Title="YAU"
+        Height="350" Width="300" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+    <Window.Resources>
+        <ResourceDictionary>
+            <!--<ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/DarkTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>-->
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <TabControl MinHeight="334" MaxHeight="334" MinWidth="300" MaxWidth="300">
+            <TabItem Header="Dashboard">
+                <Grid>
+                    <Button x:Name="InjectBtn"  Content="Inject" HorizontalAlignment="Center" Margin="0,248,0,0" VerticalAlignment="Top" Height="40" FontSize="22" Width="220" Click="InjectBtn_Click"/>
+                    <Button x:Name="SelectDLLBtn" Content="Select DLL" Margin="105,188,105,0" VerticalAlignment="Top" Height="25" Click="SelectDLLBtn_Click"/>
+                    <ComboBox x:Name="SelectProcComBox" HorizontalAlignment="Center" Margin="0,218,0,0" VerticalAlignment="Top" Width="150" Height="25" DropDownOpened="SelectProcComBox_DropDownOpened" FontSize="14" SelectionChanged="SelectProcComBox_SelectionChanged"/>
+                    <ListBox x:Name="settingsList" Margin="10,10,10,116" Focusable="False" IsHitTestVisible="False" IsTextSearchEnabled="False" FontSize="14"/>
+                    <TextBox x:Name="SelectedDLLPathTB" HorizontalAlignment="Center" Margin="0,192,0,0" VerticalAlignment="Top" Width="274" Visibility="Hidden"/>
+                    <Label x:Name="DLLInjectionStatusLbl" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,200,0,0" VerticalAlignment="Top" Width="220" FontSize="14"/>
+                    <!-- Debug stuff, possibly quite useless -->
+                </Grid>
+            </TabItem>
+            <TabItem Header="Lua Scripts">
+                <Grid>
+                    <ListBox x:Name="LuaScriptsListBox" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid MaxWidth="260" MinWidth="260" MaxHeight="150" MinHeight="130" Margin="5,5,0,5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0" Orientation="Vertical">
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,5"/>
+                                        <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5,5,5,0">
+                                        <Button x:Name="DownloadLuaBtn" Content="Download" Click="DownloadLuaBtn_Click" Tag="{Binding HtmlUrl}" Margin="0,0,5,0" Width="70" Height="25"/>
+                                        <Button x:Name="GitHubRepoBtn" Content="GitHub" Click="GitHubRepoBtn_Click" Tag="{Binding HtmlUrl}" Margin="0,0,5,0" Width="70" Height="25"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Settings">
+                <Grid>
+                    <!-- Auto-Start Settings -->
+                    <StackPanel Margin="10,10,176,211">
+                        <CheckBox x:Name="AutoStartCB" Content="Auto-Start GTAV" IsChecked="{Binding Config.AutoStartGTAV, Mode=TwoWay}" Checked="AutoStartCB_Checked" Unchecked="AutoStartCB_Unchecked" ToolTip="Automatically starts GTAV"  ToolTipService.InitialShowDelay="200"/>
+                        <TextBlock Text="Platform:" Height="17" FontSize="11" FontWeight="SemiBold" Width="104"/>
+                        <CheckBox x:Name="PlatSteamCB" Content="Steam" IsChecked="{Binding Config.PlatSteam, Mode=TwoWay}" Checked="PlatSteamCB_Checked" Unchecked="PlatSteamCB_Unchecked"/>
+                        <CheckBox x:Name="PlatEpicCB" Content="Epic Games" IsChecked="{Binding Config.PlatEpic, Mode=TwoWay}" Checked="PlatEpicCB_Checked" Unchecked="PlatEpicCB_Unchecked"/>
+                        <CheckBox x:Name="PlatRockstarCB" Content="Rockstar" IsChecked="{Binding Config.PlatRockstar, Mode=TwoWay}" Checked="PlatRockstarCB_Checked" Unchecked="PlatRockstarCB_Unchecked"/>
+                    </StackPanel>
+
+                    <!-- YAU Settings -->
+                    <StackPanel Margin="160,10,10,165">
+                        <TextBlock Text="YAU Settings" Height="17" FontSize="11" FontWeight="SemiBold" Width="120" />
+                        <CheckBox x:Name="AutoCloseCB" Content="Auto-Close YAU" IsChecked="{Binding Config.AutoCloseYAU, Mode=TwoWay}" Checked="AutoCloseCB_Checked" Unchecked="AutoCloseCB_Unchecked" ToolTip="Automatically closes the injector after a successful injection"  ToolTipService.InitialShowDelay="200"/>
+                        <CheckBox x:Name="SelectProcCB" Content="Select Process" IsChecked="{Binding Config.SelectProcess, Mode=TwoWay}" Checked="SelectProcCB_Checked" Unchecked="SelectProcCB_Unchecked" ToolTip="Select a custom process to inject"  ToolTipService.InitialShowDelay="200"/>
+                        <CheckBox x:Name="CustomDLLCB" Content="Use Custom DLL" IsChecked="{Binding Config.CustomDLL, Mode=TwoWay}" Checked="CustomDLLCB_Checked" Unchecked="CustomDLLCB_Unchecked" ToolTip="Select a custom DLL to inject"  ToolTipService.InitialShowDelay="200"/>
+                        <CheckBox x:Name="AutoUpdateYimCB" Content="Auto-Update Yim" IsChecked="{Binding Config.CheckYimUpdates, Mode=TwoWay}" Checked="AutoUpdateYimCB_Checked" Unchecked="AutoUpdateYimCB_Unchecked" ToolTip="Check for YimMenu updates at startup"  ToolTipService.InitialShowDelay="200"/>
+                        <CheckBox x:Name="AutoUpdateYAUCB" Content="Auto-Update YAU" IsChecked="{Binding Config.CheckYAUUpdates, Mode=TwoWay}" Checked="AutoUpdateYAUCB_Checked" Unchecked="AutoUpdateYAUCB_Unchecked" ToolTip="Check for YAU updates at startup"  ToolTipService.InitialShowDelay="200"/>
+                        <CheckBox x:Name="DebugCB" Content="Debug" IsChecked="{Binding Config.Debug, Mode=TwoWay}" Checked="DebugCB_Checked" Unchecked="DebugCB_Unchecked"/>
+                    </StackPanel>
+
+                    <!-- Injection Delay -->
+                    <StackPanel Margin="10,246,10,0">
+                        <Label Content="{Binding InjectionDelayText}" Height="25" FontSize="11" FontWeight="SemiBold" Width="260" />
+                        <Slider x:Name="InjectionDelaySlider" Width="260" Minimum="0" Maximum="10000" TickFrequency="500" IsSnapToTickEnabled="True" TickPlacement="TopLeft" ValueChanged="Slider_ValueChanged"/>
+                    </StackPanel>
+
+                    <!-- <Button Content="Toggle Theme" Click="ToggleTheme_Click" HorizontalAlignment="Left" Margin="58,180,0,0" VerticalAlignment="Top"/>-->
+                    <!-- YAU Theme -->
+                    <StackPanel Margin="10,101,216,152">
+                        <TextBlock Text="YAU Theme" Height="15" FontSize="11" FontWeight="SemiBold" Width="65" />
+                        <CheckBox x:Name="DarkCB" Content="Dark" IsChecked="{Binding Config.DarkTheme, Mode=TwoWay}" Checked="DarkCB_Checked" Unchecked="DarkCB_Unchecked"/>
+                        <CheckBox x:Name="LightCB" Content="Light" IsChecked="{Binding Config.LightTheme, Mode=TwoWay}" Checked="LightCB_Checked" Unchecked="LightCB_Unchecked"/>
+                    </StackPanel>
+
+                    <!-- Quick Buttons -->
+                    <Button x:Name="ChangeDLLSaveLoc" Content="Change DLL Path" FontSize="11" HorizontalAlignment="Left" Margin="189,0,0,0" VerticalAlignment="Center" Width="95" Height="22" Click="ChangeDLLSaveLoc_Click" ToolTip="Change the path where YimMenu.dll is going to be saved" ToolTipService.InitialShowDelay="200"/>
+                    <Button x:Name="YimFolderBtn" Content="YimMenu Folder" FontSize="11" HorizontalAlignment="Left" Margin="189,165,0,0" VerticalAlignment="Top" Width="95" Height="22" Click="YimFolderBtn_Click" ToolTip="Open YimMenu folder (Requires Admin privilegels to open)" ToolTipService.InitialShowDelay="200"/>
+                    <Button x:Name="YAUFolderBtn" Content="YAU Folder" FontSize="11" HorizontalAlignment="Left" Margin="189,192,0,0" VerticalAlignment="Top" Width="95" Height="22" Click="YAUFolderBtn_Click" ToolTip="Open YAU injector folder (Requires Admin privilegels to open)" ToolTipService.InitialShowDelay="200"/>
+                    <Button x:Name="ClearCacheBtn" Content="Clear Cache" FontSize="11" HorizontalAlignment="Left" Margin="189,219,0,0" VerticalAlignment="Top" Width="95" Height="22" Click="ClearCacheBtn_Click" ToolTip="Clear YimMenu cache" ToolTipService.InitialShowDelay="200"/>
+                    <Button x:Name="RestartBtn" Content="Restart" FontSize="11" HorizontalAlignment="Left" Margin="10,219,0,0" VerticalAlignment="Top" Width="95" Height="22" Click="RestartBtn_Click" ToolTip="If something has really fucked up (Restarts the application)" ToolTipService.InitialShowDelay="200"/>
+                    <Button x:Name="AboutViewBtn" Content="About" FontSize="11" HorizontalAlignment="Left" Margin="10,165,0,0" VerticalAlignment="Top" Width="95" Height="22" Click="AboutViewBtn_Click" ToolTip="View the About page" ToolTipService.InitialShowDelay="200"/>
+                    <Button x:Name="KillGTAVBtn_Copy" Content="Kill GTAV" FontSize="11" HorizontalAlignment="Left" Margin="10,192,0,0" VerticalAlignment="Top" Width="95" Height="22" Click="KillGTAVBtn_Click"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
