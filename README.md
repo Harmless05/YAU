@@ -1,3 +1,5 @@
+> [!NOTE]
+> # This repository has been closed due to unforeseen circumstances... R.I.P. YimMenu
 
 # YAU
 YimAutoUpdater aka YAU is a simple application to update [YimMenu](https://github.com/YimMenu/YimMenu), Lua scripts and inject YimMenu with customizable options
